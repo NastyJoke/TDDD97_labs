@@ -3,15 +3,14 @@
     <head>
        <meta charset="UTF-8" />
        <title>Twidder</title>
-       <link href="client.css" type="text/css" rel="stylesheet">
-       <script src="client.js" type="text/javascript"></script>
-       <script src="serverstub.js" type="text/javascript"></script>
+       <link href="static/client.css" type="text/css" rel="stylesheet">
+       <script src="static/client.js" type="text/javascript"></script>
     </head>
     <body>
       <div id="welcomeView" style="display:none;">
         <div id="container">
           <div id="logo">
-            <img src="wimage.png" alt="Twidder" />
+            <img src="static/wimage.png" alt="Twidder" />
           </div>
           <div id="login">
             <div id="loginWrapper">
@@ -62,7 +61,7 @@
                 </center>
               </div>
               <center>
-                <a class="imgLink" style="float:right;" onClick="refreshOwnMessages();"><img height="32" alt="Refresh" width="32" src="refresh.png" /></a>
+                <a class="imgLink" style="float:right;" onClick="refreshOwnMessages();"><img height="32" alt="Refresh" width="32" src="static/refresh.png" /></a>
                 <form action="#home" method="post">
                   <textarea cols="60" rows="6" style="resize:none;" id="postMessage"></textarea><br />
                   <input id="postSubmit" class="button smallBtn" type="submit" value="Post Message" />
@@ -85,7 +84,7 @@
 
                   <!-- Ugly copy paste -->
                   <hr />
-                    <div id="browseUser">
+                    <div id="browseUser" style="display:none;">
                       <div class="info" id="userInfo">
                         <center>
                           <b id="displayUserName"></b><br />
@@ -95,7 +94,7 @@
                         </center>
                       </div>
                       <center>
-                        <a class="imgLink" style="float:right;" onClick="refreshUserMessages();"><img height="32" alt="Refresh" width="32" src="refresh.png" /></a>
+                        <a class="imgLink" style="float:right;" onClick="refreshUserMessages();"><img height="32" alt="Refresh" width="32" src="static/refresh.png" /></a>
                         <form action="#" method="post">
                           <textarea cols="60" rows="6" style="resize:none;" id="postUserMessage"></textarea><br />
                           <input class="button smallBtn" id="postMessageSubmit" type="submit" value="Post Message" />

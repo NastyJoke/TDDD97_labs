@@ -1,0 +1,3 @@
+CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, email VARCHAR(50), password TEXT, firstname TEXT, familyname TEXT, gender TEXT, city TEXT, country TEXT, UNIQUE(email), CONSTRAINT check_gender CHECK (gender = 'male' OR gender = 'female'));
+CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY, receiver TEXT, sender TEXT, message TEXT);
+CREATE TABLE IF NOT EXISTS logged_users (email VARCHAR(50), token VARCHAR(36), UNIQUE(email), UNIQUE(token));

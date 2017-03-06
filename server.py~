@@ -273,7 +273,7 @@ def change_password():
 	return json.dumps(output)
 
 if __name__ == "__main__":
-    app.run(port=1234)
+    app.run()
 
 
 
