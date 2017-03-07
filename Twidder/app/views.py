@@ -1,14 +1,12 @@
-from flask import Flask, request
+from flask import request, render_template
 import random
 import json
 import database_helper as db
 import re
-from gevent.wsgi import WSGIServer
 from app import app
 
-app = Flask(__name__, static_url_path='/static')
-
-emailRegex = re.compile("^(([^<>()\[\]\\.,;:\s@\"]+(\.[^<>()\[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$")
+emailRegex = re.compile(
+    "^(([^<>()\[\]\\.,;:\s@\"]+(\.[^<>()\[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$")
 
 # Error messages in english
 ERR_USER_NOT_CONNECTED = "User not connected"
@@ -36,8 +34,7 @@ SUC_MESSAGE_POSTED = "Message posted"
 SUC_GET_USER_DATA = "Data retrieved"
 SUC_PASSWORD_CHANGED = "Password changed"
 
-
-output = {"success" : "true", "message" : "", "data" : {}}
+output = {"success": "true", "message": "", "data": {}}
 data = {}
 
 
@@ -47,39 +44,44 @@ def err(message):
     output["message"] = message
     output["success"] = "false"
     output["data"] = {}
-    
-def success(message, data = {}):
+
+
+def success(message, data={}):
     output["message"] = message
     output["success"] = "true"
     output["data"] = data
 
 
-def get_param_or_default(param, default = ""):
+def get_param_or_default(param, default=""):
     jsonObject = request.json
     if param in jsonObject:
         return jsonObject[param]
     else:
         return default
 
+
 def generate_token():
     # Taken from serverstub.js
     letters = "abcdefghiklmnopqrstuvwwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
     token = ""
     for i in range(0, 36):
-        token += letters[random.randint(0, len(letters)-1)]
+        token += letters[random.randint(0, len(letters) - 1)]
     return token
-
-
-
-
-
-
 
 
 @app.route("/", methods=['GET'])
 def root():
     db.init_tables()
     return app.send_static_file("client.html")
+
+
+@app.route("/connect", methods=['POST'])
+def connect():
+    """if request.environ.get('wsgi.websocket'):
+        ws = request.environ['wsgi.websocket']
+        while True:
+            message_token = ws.receive()"""
+    print("qqqqqqq")
 
 
 
@@ -91,7 +93,7 @@ def sign_in():
     if (user == None):
         err(ERR_INVALID_USER_PASSWORD)
         return json.dumps(output)
-    
+
     user = json.loads(user)
     if user != None:
         if db.get_token(user["email"]) == None:
@@ -100,7 +102,7 @@ def sign_in():
             if typed_password == password:
                 token = generate_token()
                 db.log_user(email, token)
-                success(SUC_USER_LOGGED_IN,token)
+                success(SUC_USER_LOGGED_IN, token)
             else:
                 err(ERR_INVALID_USER_PASSWORD)
         else:
@@ -109,8 +111,9 @@ def sign_in():
         err(ERR_INVALID_USER_PASSWORD)
     return json.dumps(output)
 
+
 # form: token
-@app.route("/sign_out", methods=['POST']) 
+@app.route("/sign_out", methods=['POST'])
 def sign_out():
     token = get_param_or_default("token")
     if db.is_connected(token):
@@ -120,21 +123,18 @@ def sign_out():
         err(ERR_USER_NOT_CONNECTED)
     return json.dumps(output)
 
+
 # form: email, password, firstname, familyname, gender, city, country
-@app.route("/sign_up", methods=['POST']) # CHANGE TO POST 
+@app.route("/sign_up", methods=['POST'])  # CHANGE TO POST
 def sign_up():
-
-
-
-    user = {"email" : get_param_or_default("email"), \
-            "password" : get_param_or_default("password"), \
-            "firstname" : get_param_or_default("firstname"), \
-            "familyname" : get_param_or_default("familyname"), \
-            "gender" : get_param_or_default("gender"), \
-            "city" : get_param_or_default("city"), \
-            "country" : get_param_or_default("country") \
+    user = {"email": get_param_or_default("email"), \
+            "password": get_param_or_default("password"), \
+            "firstname": get_param_or_default("firstname"), \
+            "familyname": get_param_or_default("familyname"), \
+            "gender": get_param_or_default("gender"), \
+            "city": get_param_or_default("city"), \
+            "country": get_param_or_default("country") \
             }
-
 
     if emailRegex.match(user["email"]):
         if user["firstname"] != "":
@@ -165,6 +165,7 @@ def sign_up():
 
     return json.dumps(output)
 
+
 # form: token
 @app.route("/remove_user", methods=['POST'])
 def remove_user():
@@ -178,8 +179,9 @@ def remove_user():
         err(ERR_USER_NOT_CONNECTED)
     return json.dumps(output)
 
+
 # form: token, message, email
-@app.route("/post_message",methods=['POST']) 
+@app.route("/post_message", methods=['POST'])
 def post_message():
     token = get_param_or_default("token")
     receiver = get_param_or_default("email")
@@ -197,9 +199,10 @@ def post_message():
     else:
         err(ERR_USER_NOT_CONNECTED)
     return json.dumps(output)
-    
+
+
 # form: token, email
-@app.route("/get_user_data_by_email",methods=['POST']) 
+@app.route("/get_user_data_by_email", methods=['POST'])
 def get_user_data_by_email():
     token = get_param_or_default("token")
     email = get_param_or_default("email")
@@ -207,50 +210,53 @@ def get_user_data_by_email():
         if db.find_user(email) != None:
             user_data = db.find_user(email)
             user_data = json.loads(user_data)
-            user_data.pop("password",None)
-            success(SUC_GET_USER_DATA,user_data)
+            user_data.pop("password", None)
+            success(SUC_GET_USER_DATA, user_data)
         else:
             err(ERR_USER_NOT_FOUND)
     else:
         err(ERR_USER_NOT_CONNECTED)
     return json.dumps(output)
-        
+
+
 # form: token
-@app.route("/get_user_data_by_token",methods=['POST']) 
+@app.route("/get_user_data_by_token", methods=['POST'])
 def get_user_data_by_token():
     token = get_param_or_default("token")
     if db.is_connected(token):
         user_data = db.find_user(db.get_email(token)[0])
         user_data = json.loads(user_data)
-        user_data.pop("password",None)
-        success(SUC_GET_USER_DATA,user_data)
+        user_data.pop("password", None)
+        success(SUC_GET_USER_DATA, user_data)
     else:
         err(ERR_USER_NOT_CONNECTED)
     return json.dumps(output)
-    
+
+
 # form: token
-@app.route("/get_user_messages_by_token",methods=['POST']) 
+@app.route("/get_user_messages_by_token", methods=['POST'])
 def get_user_messages_by_token():
     token = get_param_or_default("token")
     if db.is_connected(token):
         messages = []
         for message_id, message, sender in db.get_user_messages_by_token(token):
-            messageObject = {"id" : message_id, "content" : message, "writer" : sender}
+            messageObject = {"id": message_id, "content": message, "writer": sender}
             messages.append(messageObject)
-        success(SUC_GET_USER_DATA,messages)
+        success(SUC_GET_USER_DATA, messages)
     else:
         err(ERR_USER_NOT_CONNECTED)
     return json.dumps(output)
-    
+
+
 # form: token, email
-@app.route("/get_user_messages_by_email",methods=['POST']) 
+@app.route("/get_user_messages_by_email", methods=['POST'])
 def get_user_messages_by_email():
     token = get_param_or_default("token")
     email = get_param_or_default("email")
     if db.is_connected(token):
         if db.find_user(email) != None:
             messages = []
-            for message_id, message, sender in db.get_user_messages_by_email(token,email):
+            for message_id, message, sender in db.get_user_messages_by_email(token, email):
                 messageObject = {"id": message_id, "content": message, "writer": sender}
                 messages.append(messageObject)
             success(SUC_GET_USER_DATA, messages)
@@ -260,13 +266,12 @@ def get_user_messages_by_email():
         err(ERR_USER_NOT_CONNECTED)
     return json.dumps(output)
 
-    
+
 # form: token, oldPassword, newPassword
-@app.route("/change_password",methods=['POST']) 
+@app.route("/change_password", methods=['POST'])
 def change_password():
-    
     token = get_param_or_default("token")
-    
+
     userMail = db.get_email(token)
     if userMail != None:
         userMail = userMail[0]
@@ -288,15 +293,3 @@ def change_password():
     else:
         err(ERR_USER_NOT_CONNECTED)
     return json.dumps(output)
-
-if __name__ == "__main__":
-    app.run(port=5000)
-
-
-
-
-
-
-
-
-

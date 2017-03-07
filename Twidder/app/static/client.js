@@ -1,8 +1,7 @@
-
-
 var mailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 var search;
+var websocket;
 
 sendRequest = function(url, parameters, callback)
 {
@@ -106,7 +105,7 @@ displayView = function(view) {
 
               if (info.success == "true")
               {
-
+                refreshOwnMessages();
                 document.getElementById("displayName").innerHTML = info.data.firstname.concat(' '.concat((info.data.familyname)));
                 document.getElementById("displayMail").innerHTML = info.data.email;
                 document.getElementById("displayCity").innerHTML = info.data.city;
@@ -147,6 +146,52 @@ displaySearch = function()
         });
     }
 }
+
+
+
+initSocket = function()
+{
+    websocket = new WebSocket("ws://localhost:5000/connect");
+    websocket.onopen = function(evt) { onOpen(evt) };
+    websocket.onclose = function(evt) { onClose(evt) };
+    websocket.onmessage = function(evt) { onMessage(evt) };
+    websocket.onerror = function(evt) { onError(evt) };
+}
+
+ function onOpen(evt)
+  {
+    console.log("CONNECTED");
+    doSend("WebSocket rocks");
+  }
+
+  function onClose(evt)
+  {
+    console.log("DISCONNECTED");
+  }
+
+  function onMessage(evt)
+  {
+    // Check auto Log out
+
+
+
+
+
+  }
+
+  function onError(evt)
+  {
+    console.log('ERROR: ' + evt.data);
+  }
+
+  function doSend(message)
+  {
+    websocket.send(message);
+  }
+
+
+window.addEventListener("load", initSocket, false);
+
 
 window.onload = function(){
 
@@ -203,6 +248,7 @@ window.onload = function(){
 	validatePostMessage(0);
     window.scrollTo(0,0);
     });
+
 
 
 
@@ -384,12 +430,9 @@ validatePostMessage = function(self = 1) {
 
         var param = constructRequestObject("token", localStorage.getItem("token"), "message", message, "email", receiver);
         sendRequest("post_message",param, (response) => {
-
+            refreshOwnMessages();
+            document.getElementById("postMessage").value = "";
         });
-
-        document.getElementById("postMessage").value = "";
-
-        refreshOwnMessages();
     });
   }
   else {
@@ -400,12 +443,10 @@ validatePostMessage = function(self = 1) {
 
     var param = constructRequestObject("token", localStorage.getItem("token"), "message", message, "email", receiver);
     sendRequest("post_message",param, (response) => {
+        document.getElementById("postUserMessage").value = "";
+        refreshUserMessages();
 
     });
-
-    document.getElementById("postUserMessage").value = "";
-
-    refreshUserMessages();
   }
 }
 
