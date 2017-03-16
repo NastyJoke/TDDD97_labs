@@ -1,0 +1,143 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+       <meta charset="UTF-8" />
+       <title>Twidder</title>
+       <link href="static/client.css" type="text/css" rel="stylesheet">
+       <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+       <script src="static/jquery-3.1.1.min.js" type="text/javascript"></script>
+       <script src="static/sha256.js" type="text/javascript"></script>
+       <script src="static/md5.js" type="text/javascript"></script>
+       <script src="static/client.js" type="text/javascript"></script>
+    </head>
+    <body>
+      <div id="welcomeView" style="display:none;">
+        <div id="container">
+          <div id="logo">
+            <img src="static/wimage.png" alt="Twidder" />
+          </div>
+          <div id="login">
+            <div id="loginWrapper">
+              <form id="loginForm" action="#" method="post">
+                <div><label for="email">Email</label><input type="email" id="email" /></div>
+                <div><label for="password">Password</label><input type="password" id="password" /></div>
+                <input class="button" id="loginSubmit" type="submit" value="Log in" />
+                <span class="errorMessage" id="loginErrorMessage"></span>
+              </form>
+            </div>
+          </div>
+          <div id="signup">
+            <div id="signupWrapper">
+              <form action="#" method="post">
+                <label for="firstName">First name</label><input type="text" id="firstName" />
+                <label for="familyName">Family name</label><input type="text" id="familyName" />
+                <label for="gender">Gender</label><select id="gender">
+                  <option selected value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+                <label for="city">City</label><input type="text" id="city" />
+                <label for="country">Country</label><input type="text" id="country" />
+                <label for="newEmail">Email</label><input type="email" id="newEmail" />
+                <label for="newPassword">Password</label><input type="password" id="newPassword" />
+                <label for="repeatPassword">Repeat password</label><input type="password" id="repeatPassword" />
+                <input class="button" id="signupSubmit" type="submit" value="Sign Up" />
+                <span class="errorMessage" id="signupMessage"></span><br />
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="mainView">
+        <div id="menuBar">
+          <a id="homeButton" onClick="activeButton(0);" class="tabButton button">Home</a>
+          <a id="browseButton" onClick="activeButton(1);" class="tabButton button">Browse</a>
+          <a id="accountButton" onClick="activeButton(2);" class="tabButton button">Account</a>
+        </div>
+        <hr />
+          <div id="contentWrapper">
+            <div id="home">
+              <div class="info" id="info" style="display:block;">
+                <center>
+                  <b id="displayName"></b><br />
+                  <span id="displayMail"></span><br />
+                  <i id="displayCity"></i>, <i id="displayCountry"></i><br />
+                  <span id="displayGender"></span>
+                </center>
+              </div>
+              <center>
+                <a ondragstart="return false;" class="imgLink" style="float:right;" onClick="refreshOwnMessages();"><img height="32" alt="Refresh" width="32" src="static/refresh.png" /></a>
+                <img id="bin" ondrop="drop(event)" alt="bin" title="Drop a message here to delete it" ondragover="allowDrop(event)" style="float:right;" ondragstart="return false;" src="static/bin.png" height="32" width="32" />
+                </center>
+                <form action="#home" method="post" name="postForm" id="postForm">
+                  <center><textarea name="postMessage" ondragover="return false;" cols="60" rows="6" style="resize:none;" id="postMessage"></textarea></center><br />
+                  <div id="postMessageInputs">
+                    <input id="postSubmit" class="button smallBtn" type="submit" value="Post Message" />
+                    <input id="ofd" type="file" class="button smallBtn" value="Upload video" />
+                  </div>
+                  <span class="errorMessage" id="refreshErrorMessage"></span><br />
+                </form>
+                <div id="ownWall">
+
+                </div>
+
+            </div>
+            <div id="browse">
+              <center>
+                  <form action="#" method="post">
+                    <input style="text-align:center;" name="s" placeholder="Search someone" type="text" id="search" />
+                    <input class="button smallBtn" type="submit" id="searchSubmit" value="Search user" />
+                  </form>
+                  <span class="errorMessage" id="searchMessage"></span>
+
+
+
+                  <!-- Ugly copy paste -->
+                  <hr />
+                    <div id="browseUser" style="display:none;">
+                      <div class="info" id="userInfo">
+                        <center>
+                          <b id="displayUserName"></b><br />
+                          <span id="displayUserMail"></span><br />
+                          <i id="displayUserCity"></i>, <i id="displayUserCountry"></i><br />
+                          <span id="displayUserGender"></span>
+                        </center>
+                      </div>
+                      <center>
+                        <a class="imgLink" style="float:right;" onClick="refreshUserMessages();"><img height="32" alt="Refresh" width="32" src="static/refresh.png" /></a>
+                      </center>
+                        <form action="#" method="post" name="postUserForm" id="postUserForm">
+                          <center><textarea name="postUserMessage" ondragover="return false;" cols="60" rows="6" style="resize:none;" id="postUserMessage"></textarea></center><br />
+                          <div id="postUserMessageInputs">
+                            <input class="button smallBtn" id="postMessageSubmit" type="submit" value="Post Message" />
+                            <input id="ofdUser" type="file" class="button smallBtn" value="Upload video" />
+                          </div>
+                          <span class="errorMessage" id="refreshUserErrorMessage"></span><br />
+                        </form>
+                        <div id="userWall">
+
+                        </div>
+                    </div>
+                    <!--               -->
+
+
+              </center>
+            </div>
+            <div id="account">
+              <button class="button smallBtn" style="width:20%;float:right;" onClick="disconnect();">Disconnect</button>
+              <div id="changePwdForm">
+                <form action="#" method="post">
+                  <center>
+                    <label for="oldPassword">Old Password</label> <input class="changePwd" type="password" id="oldPassword"/>
+                    <label for="changePassword">New Password</label> <input class="changePwd" type="password" id="changePassword"/>
+                    <label for="changePassword">Repeat Password</label> <input class="changePwd" type="password" id="repeatChangePassword"/>
+                    <input class="button smallBtn" id="changePwdSubmit" type="submit" value="Change"/><br />
+                    <center><span class="errorMessage" id="changePasswordErrorMessage"></span><br />
+                    </center>
+                  </center>
+                </form>
+              </div>
+            </div>
+        </div>
+      </div>
+    </body>
+</html>

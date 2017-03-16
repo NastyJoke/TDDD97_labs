@@ -1,0 +1,269 @@
+
+body, div#container
+{
+    background-color:#00aba9;
+}
+
+div#welcomeView
+{
+    margin: 0 0 0 0;
+    width:100%;
+    height:100%;
+}
+
+div#container
+{
+  margin-top: 100px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 600px;
+  height: 400px;
+}
+
+
+div#logo
+{
+  margin-right: 10px;
+  width: 340px;
+  height: 400px;
+  float: left;
+}
+
+div#login
+{
+  width: 250px;
+  height: 145px;
+  margin-bottom:5px;
+  float: right;
+  background-color:white;
+}
+
+div#signup
+{
+  width: 250px;
+  height: 250px;
+  float: right;
+  background-color:white;
+}
+
+div#loginWrapper, div#signupWrapper
+{
+  margin-top:10px;
+}
+
+
+div#mainView
+{
+  margin-left:auto;
+  margin-right:auto;
+  width:50%;
+}
+
+div#changePwdForm
+{
+  margin-top:100px;
+}
+
+div#menuBar
+{
+    margin-left:auto;
+    margin-right:auto;
+    width:100%;
+}
+
+div.info
+{
+  border-style:solid;
+  border-width: 1px;
+  float:left;
+  width:150px;
+  height:100px;
+  overflow-x: hidden;
+  background-color:#9e9e9e;
+}
+
+
+
+#contentWrapper>div
+{
+    display:none;
+}
+
+#contentWrapper>div:target
+{
+    display:block;
+}
+
+
+input, select, button
+{
+  float:left;
+  display:inline-block;
+  border-radius: 3px;
+  padding:3px 3px;
+  width:40%;
+}
+
+select
+{
+    width:44%;
+}
+
+label + input
+{
+    display:inline-block;
+}
+
+label
+{
+    display:inline-block;
+    float: left;
+    clear: left;
+    margin-left:5px;
+    width:50%;
+}
+
+input.changePwd
+{
+  width:50%;
+}
+
+
+button
+{
+  display:inline;
+  width:32.75%;
+}
+
+input[type="submit"]
+{
+    display:block;
+    float:none;
+    margin-top:10px;
+    margin-right:auto;
+    margin-left:auto;
+    width:100px;
+}
+
+input[type="submit"]:hover
+{
+  background-color: #31B404;
+}
+
+span.errorMessage
+{
+    color:red;
+    font-weight:bold;
+    
+	position: relative;
+	left: 0; 
+	right: 0; 
+	margin-left: auto;
+	margin-right: auto;
+	font-size:0.8em;
+}
+
+span.successMessage
+{
+    color:green;
+    font-weight:bold;
+}
+
+textarea
+{
+    width:100%;
+    border-radius:5px;
+}
+
+.tabButton
+{
+  font: bold 11px Arial;
+  text-decoration: none;
+  padding: 5px 12% 5px 12%;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+  cursor:pointer;
+}
+
+.button
+{
+    background-color:#60b957;
+}
+
+.button, .button:active, .button:visited, .button:link
+{
+    outline:none;
+}
+
+.button:hover
+{
+        background-color:#60a957;
+}
+
+.smallBtn
+{
+    width:25%;
+}
+
+.imgLink
+{
+    text-decoration:none;
+}
+
+.imgLink
+{
+    cursor: pointer;
+}
+
+video
+{
+    width:300px;
+}
+
+#postSubmit, #postMessageSubmit
+{
+    width:100px;
+    float:left;
+    margin-left:0px;
+    margin-top:0px;
+    display:inline;
+    padding-top:4px;
+    padding-bottom:4px;
+}
+#ofd, #ofdUser
+{
+    width:190px;
+    display:inline;
+    float:right;
+}
+
+#postMessageInputs, #postUserMessageInputs
+{
+    width:300px;
+    margin-left:auto;
+    margin-right:auto;
+    margin-bottom:50px;
+    display:block;
+}
+
+.message
+{
+    margin-top:10px;
+    border-style:solid;
+    border-width:1px;
+    border-radius:10px;
+    background-color:#eeeeee;
+}
+
+
+#browseUser
+{
+	margin-top:60px;
+}
+
+#searchMessage
+{
+	position:relative;
+}
